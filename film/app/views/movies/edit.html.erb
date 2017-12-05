@@ -1,0 +1,18 @@
+<h1>Edit Film</h1>
+
+<%= form_for(@movie) do |f|%>
+
+<%= f.label :title %><br>
+<%= f.text_field :title %><br>
+
+<%= f.label :description %><br>
+<%= f.text_area :description %><br>
+
+<% @actors.each do |actor| %>
+  <% if actor.id != nil %>
+    <h2><%= actor.name %><%= link_to "Remove Actor", "/movies/#{@movie.id}/actors/#{actor.id}/remove", method: :post %></h2>
+  <% end %>
+<% end %>
+
+<%= f.submit%>
+<% end %>

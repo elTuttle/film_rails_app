@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :actors
   resources :movies
   devise_for :users
+
+  post '/movies/:movie_id/actors/:id/remove', to: 'movies#remove_actor'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

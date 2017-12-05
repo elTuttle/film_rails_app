@@ -15,14 +15,12 @@ class MoviesController < ApplicationController
   end
 
   def create
-    if params[:movie][:actor_ids].nil?
-      @movie = Movie.new(movie_params_new_actor)
-    else
-      @movie = Movie.new(movie_params_old_actor)
+    @movie = Movie.new(movie_params)
+    if params[:movie][:actor_ids] != nil && params[:movie][:actor_ids] != ""
       @movie.actors << Actor.find(params[:movie][:actor_ids])
     end
     @movie.user_id = current_user.id
-    binding.pry
+    #binding.pry
     if @movie.save
       redirect_to movie_path(@movie)
     else
@@ -37,11 +35,40 @@ class MoviesController < ApplicationController
   end
 
   def edit
+    if current_user.id == Movie.find(params[:id]).user_id
+      @movie = Movie.find(params[:id])
+      @actor = @movie.actors.build
+      @actors = @movie.actors
+    else
+      flash[:alert] = "Can't edit someone else's film"
+      redirect_to new_user_session_path
+    end
+  end
 
+  def remove_actor
+    @movie = Movie.find(params[:movie_id])
+    @movie.actors.delete(Actor.find(params[:id]))
+    if @movie.save
+      redirect_to edit_movie_path(@movie)
+    else
+      flash[:alert] = "Unable to remove actor"
+      redirect_to edit_movie_path(@movie)
+    end
   end
 
   def update
-
+    @movie = Movie.find(params[:id])
+    if params[:movie][:actor_ids] != nil && params[:movie][:actor_ids] != ""
+      @movie.actors << Actor.find(params[:movie][:actor_ids])
+    end
+    #binding.pry
+    if @movie.update(movie_params)
+      @movie.save
+      redirect_to movie_path(@movie)
+    else
+      flash[:alert] = "Could not submit Movie"
+      redirect_to new_movie_path
+    end
   end
 
   def destroy
@@ -53,12 +80,7 @@ class MoviesController < ApplicationController
 
 
   private
-  def movie_params_new_actor
+  def movie_params
     params.require(:movie).permit(:title, :description, actors_attributes: [:name,:age,:bio])
   end
-
-  def movie_params_old_actor
-    params.require(:movie).permit(:title, :description)
-  end
-
 end

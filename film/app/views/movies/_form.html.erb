@@ -6,10 +6,10 @@
 <%= f.label :description %><br>
 <%= f.text_area :description %><br>
 
-<p>Select Top-Billed Actor:</p>
-<%= f.collection_select :actor_ids, Actor.all, :id, :name %><br>
+<p>Add Existing Actor:</p>
+<%= f.collection_select :actor_ids, Actor.all, :id, :name, include_blank: ""  %><br>
 
-<p>Create Top-Billed Actor:</p>
+<p>Add New Actor:</p>
 <%= f.fields_for(:actors) do |actor_form| %>
     <%= actor_form.label :name %><br>
     <%= actor_form.text_field :name %><br>
@@ -22,5 +22,4 @@
 <% end %>
 
 <%= f.submit%>
-
 <% end %>
