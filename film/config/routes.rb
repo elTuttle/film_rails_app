@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   root 'welcome#home'
   resources :actors
   resources :movies
+  resources :movies, only: [:show] do
+    resources :actors, only: [:new, :create]
+  end
   devise_for :users
 
   post '/movies/:movie_id/actors/:id/remove', to: 'movies#remove_actor'
