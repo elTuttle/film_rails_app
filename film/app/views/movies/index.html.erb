@@ -1,5 +1,5 @@
 <% @movies.each do |movie| %>
-  <%= link_to movie.title, movie_path(movie) %>
-  <%= movie.description %>
+  <h2><%= link_to movie.title, movie_path(movie) %></h2>
+  <h3><%= movie.description %></h3>
   <p>Rating: <%= movie.rating %></p>
 <% end %>
