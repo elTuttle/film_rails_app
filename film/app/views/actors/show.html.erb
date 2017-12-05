@@ -1,0 +1,5 @@
+<h1><%= @actor.name %></h1>
+<h2>Age: <%= @actor.age %></h2>
+<p><font size="5"><%= @actor.bio %></font></p>
+
+<%= link_to "Delete", actor_path(@actor), method: :delete %>

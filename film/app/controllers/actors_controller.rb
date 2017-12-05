@@ -5,23 +5,28 @@ class ActorsController < ApplicationController
   end
 
   def show
-
+    @actor = Actor.find(params[:id])
   end
 
   def new
-    if params[:movie_id]
-      @movie = Movie.find(params[:movie_id])
-      @actor = @movie.actors.build
-      @location = movie_actors_path(@movie,@actor)
+    if current_user
+      if params[:movie_id]
+        @movie = Movie.find(params[:movie_id])
+        @actor = @movie.actors.build
+        @location = movie_actors_path(@movie,@actor)
+      else
+        @actor = Actor.new
+        @location = ""
+      end
     else
-      @actor = Actor.new
-      @location = actor_path(@actor)
+      flash[:alert] = "Must be logged in to Create Movie"
+      redirect_to new_user_session_path
     end
   end
 
   def create
-    if @actor = Actor.create(actor_params)
-      #binding.pry
+    @actor = Actor.create(actor_params)
+    if @actor.save
       if params[:movie_id]
         @movie = Movie.find(params[:movie_id])
         @movie.actors << @actor
@@ -35,9 +40,15 @@ class ActorsController < ApplicationController
         redirect_to actor_path(@actor)
       end
     else
-      flash[:alert] = "Could not save actor"
+      flash[:alert] = "Could not save actor, might already exist or name field was empty"
       redirect_to new_actor_path
     end
+  end
+
+  def destroy
+    @actor = Actor.find(params[:id])
+    @actor.destroy
+    redirect_to actors_path
   end
 
 

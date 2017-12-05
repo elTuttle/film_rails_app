@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   end
   devise_for :users
 
+  post '/actors/new', to: 'actors#create'
+
   post '/movies/:movie_id/actors/:id/remove', to: 'movies#remove_actor'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

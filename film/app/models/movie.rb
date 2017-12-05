@@ -4,4 +4,6 @@ class Movie < ActiveRecord::Base
 
   accepts_nested_attributes_for :actors, reject_if: proc { |attributes| attributes['name'].blank? }
 
+  validates :title, presence: true, uniqueness: true
+
 end
