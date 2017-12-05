@@ -10,7 +10,7 @@
     <%= link_to "Edit", edit_movie_path(@movie) %>
     <%= link_to "Delete", movie_path(@movie), method: :delete %>
   <%else%>
-    <%= link_to "Write Review", new_movie_rating %>
+    <%= link_to "Write Review", new_movie_rating_path(@movie) %>
   <% end %>
 <% end %>
-<%= link_to "See Reviews", movie_ratings %>
+<%= link_to "See Reviews", movie_ratings_path(@movie) %>
