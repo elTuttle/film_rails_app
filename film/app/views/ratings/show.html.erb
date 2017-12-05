@@ -1,3 +1,10 @@
 <h3><%= @rating.content %></h3>
 <h2><%= @rating.score %> out of 10 </h2>
 <p>Author: <%=@rating.user.username%></p>
+
+<%if current_user %>
+  <%if current_user.id == @rating.user_id%>
+    <%= link_to "Edit", edit_movie_rating_path(@movie, @rating) %>
+    <%= link_to "Delete", movie_rating_path(@movie, @rating), method: :delete %>
+  <% end %>
+<% end %>

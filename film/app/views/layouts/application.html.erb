@@ -12,10 +12,13 @@
 <%= render 'layouts/header' %>
 
 <% if flash[:alert] != nil %>
-  <%= flash[:alert] %>
+  <h2><%= flash[:alert] %></h2>
 <% end %>
 <% if flash[:message] != nil %>
-  <%= flash[:message] %>
+  <h2><%= flash[:message] %></h2>
+<% end %>
+<% if flash[:error] != nil %>
+  <h2><%= flash[:error] %></h2>
 <% end %>
 
 <%= yield %>

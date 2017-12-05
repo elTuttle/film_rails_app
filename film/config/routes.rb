@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post '/actors/new', to: 'actors#create'
 
   post '/movies/:movie_id/actors/:id/remove', to: 'movies#remove_actor'
+  patch '/movies/:movie_id/ratings/:id/edit', to: 'ratings#update'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

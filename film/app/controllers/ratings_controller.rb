@@ -2,7 +2,8 @@ class RatingsController < ApplicationController
 
   def index
     if Movie.find_by(id: params[:movie_id]).ratings
-      @ratings = Movie.find(params[:movie_id]).ratings.all
+      @movie = Movie.find(params[:movie_id])
+      @ratings = @movie.ratings
     else
       flash[:alert] = "No reviews yet"
       redirect_to movie_path(params[:movie_id])
@@ -11,12 +12,19 @@ class RatingsController < ApplicationController
 
   def show
     @rating = Rating.find(params[:id])
+    @movie = Movie.find(params[:movie_id])
   end
 
   def new
     if current_user
       if params[:movie_id]
         @movie = Movie.find(params[:movie_id])
+        @movie.ratings.each do |rating|
+          if rating.user_id == current_user.id
+            flash[:alert] = "User has already reviewed this movie."
+            redirect_to movie_path(@movie)
+          end
+        end
         @rating = @movie.ratings.build
         @location = movie_ratings_path(@movie,@actor)
       else
@@ -32,37 +40,39 @@ class RatingsController < ApplicationController
   def create
     @rating = Rating.create(rating_params)
     @rating.user_id = current_user.id
+    @movie = Movie.find(params[:movie_id])
     if @rating.save
       if params[:movie_id]
-        @movie = Movie.find(params[:movie_id])
         @movie.ratings << @rating
         redirect_to movie_ratings_path(params[:movie_id])
       else
         redirect_to rating_path(@rating)
       end
     else
-      flash[:alert] = "Could not save rating"
+      flash[:error] = @rating.errors.to_a.to_s
       redirect_to new_movie_rating_path(@movie)
     end
   end
 
   def edit
-    if current_user.id == Review.find(params[:id]).user_id
+    if current_user.id == Rating.find(params[:id]).user_id
       @rating = Rating.find(params[:id])
+      @location = ""
     else
       flash[:alert] = "Can't edit someone else's film"
-      redirect_to movie_ratings_path
+      redirect_to movie_ratings_path(@movie)
     end
   end
 
   def update
+    @movie = Movie.find(params[:movie_id])
     @rating = Rating.find(params[:id])
     if @rating.update(rating_params)
       @rating.save
-      redirect_to movie_rating_path(@rating)
+      redirect_to movie_rating_path(@movie, @rating)
     else
       flash[:alert] = "Could not submit Rating"
-      redirect_to new_movie_rating_path
+      redirect_to new_movie_rating_path(@movie)
     end
   end
 
@@ -70,7 +80,7 @@ class RatingsController < ApplicationController
     @movie = Movie.find(params[:movie_id])
     @rating = Rating.find(params[:id])
     @rating.destroy
-    redirect_to movie_ratings_path
+    redirect_to movie_ratings_path(@movie)
   end
 
   private

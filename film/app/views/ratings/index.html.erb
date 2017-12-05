@@ -1,6 +1,8 @@
+<h1><%= link_to @movie.title, movie_path(@movie)%></h1>
+
 <%@ratings.each do |rating|%>
 
-  <h3><%= rating.content %></h3>
+  <h3><%= link_to rating.content, movie_rating_path(@movie, rating) %></h3>
   <h2><%= rating.score %> out of 10 </h2>
   <p>Author: <%=rating.user.username%></p>
 
