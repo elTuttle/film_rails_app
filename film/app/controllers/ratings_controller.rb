@@ -1,7 +1,11 @@
 class RatingsController < ApplicationController
 
-  def show
+  def index
     @ratings = Movie.find(params[:movie_id]).ratings.all
+  end
+
+  def show
+    @rating = Rating.find(params[:id])
   end
 
   def new
@@ -22,12 +26,13 @@ class RatingsController < ApplicationController
 
   def create
     @rating = Rating.create(rating_params)
+    @rating.user_id = current_user.id
     if @rating.save
       if params[:movie_id]
         @movie = Movie.find(params[:movie_id])
         @movie.ratings << @rating
         if @movie.save
-          redirect_to movie_path(params[:movie_id])
+          redirect_to movie_ratings_path(params[:movie_id])
         else
           flash[:alert] = "Could not save rating"
           redirect_to new_movie_rating_path
@@ -42,7 +47,10 @@ class RatingsController < ApplicationController
   end
 
   def destroy
-
+    @movie = Movie.find(params[:movie_id])
+    @rating = Rating.find(params[:id])
+    @rating.destroy
+    redirect_to movie_ratings_path
   end
 
   private
