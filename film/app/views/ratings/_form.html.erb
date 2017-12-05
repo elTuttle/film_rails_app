@@ -1,0 +1,10 @@
+<%= form_for @rating, :url => @location do |f|%>
+
+<%= f.label :content %><br>
+<%= f.text_field :content %><br>
+
+<%= f.label :score %><br>
+<%= f.number_field :score %><br>
+
+<%= f.submit%>
+<% end %>

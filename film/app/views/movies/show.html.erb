@@ -4,8 +4,13 @@
   <h2><%= link_to actor.name, actor_path(actor) %></h2>
 <% end %>
 <p><font size="5"><%= @movie.description %></font></p>
-<%if current_user.id == @movie.user_id%>
-  <%= link_to "Add Actor", new_movie_actor_path(@movie) %>
-  <%= link_to "Edit", edit_movie_path(@movie) %>
-  <%= link_to "Delete", movie_path(@movie), method: :delete %>
+<%if current_user %>
+  <%if current_user.id == @movie.user_id%>
+    <%= link_to "Add Actor", new_movie_actor_path(@movie) %>
+    <%= link_to "Edit", edit_movie_path(@movie) %>
+    <%= link_to "Delete", movie_path(@movie), method: :delete %>
+  <%else%>
+    <%= link_to "Write Review", new_movie_rating %>
+  <% end %>
 <% end %>
+<%= link_to "See Reviews", movie_ratings %>
