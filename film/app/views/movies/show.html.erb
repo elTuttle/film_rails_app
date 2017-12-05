@@ -5,6 +5,7 @@
 <% end %>
 <p><font size="5"><%= @movie.description %></font></p>
 <%if current_user.id == @movie.user_id%>
+  <%= link_to "Add Actor", new_movie_actor_path(@movie) %>
   <%= link_to "Edit", edit_movie_path(@movie) %>
   <%= link_to "Delete", movie_path(@movie), method: :delete %>
 <% end %>

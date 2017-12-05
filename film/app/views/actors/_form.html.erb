@@ -1,0 +1,13 @@
+<%= form_for @actor, :url => @location do |f|%>
+
+<%= f.label :name %><br>
+<%= f.text_field :name %><br>
+
+<%= f.label :age %><br>
+<%= f.number_field :age %><br>
+
+<%= f.label :bio %><br>
+<%= f.text_area :bio %><br>
+
+<%= f.submit%>
+<% end %>
