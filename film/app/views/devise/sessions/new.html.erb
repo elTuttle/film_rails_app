@@ -3,11 +3,11 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="field">
      <p>Log in with Username or Email</p>
-     <%= f.text_field :login %>
+     <%= f.text_field :login %><br />
   </div>
 
   <div class="field">
-    <%= f.label :password %><br />
+    <%= f.label :password %><br><br>
     <%= f.password_field :password, autocomplete: "off" %>
   </div>
 

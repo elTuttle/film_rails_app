@@ -1,0 +1,5 @@
+<% @movies.each do |movie| %>
+  <%= link_to movie.title, movie_path(movie) %>
+  <%= movie.description %>
+  <p>Rating: <%= movie.rating %></p>
+<% end %>

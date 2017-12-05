@@ -1,15 +1,7 @@
 <nav class="">
   <h2>
     <%= link_to "Home", '/' %>
-    <% if !!@cart %>
-      <%= link_to "Films", movies_path%>
-    <% end %>
-    <% if current_user.nil? %>
-      <%= link_to "Sign In", new_user_session_path %>
-      <%= link_to "Sign Up", new_user_registration_path %>
-    <% else %>
-      Signed in as <%= current_user.username%>
-      <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
-    <% end %>
+    <%= link_to "Films", movies_path%>
+    <%= link_to "Create Film", new_movie_path%>
   </h2>
 </nav>
