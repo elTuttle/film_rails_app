@@ -6,10 +6,17 @@ class MoviesController < ApplicationController
 
   def new
     @movie = Movie.new
+    @movie.actors.build
   end
 
   def create
-
+    @movie = Movie.new(movie_params)
+    if @movie.save
+      redirect_to movie_path(@movie)
+    else
+      flash[:alert] = "Could not submit Movie"
+      redirect_to new_movie_path
+    end
   end
 
   def show
