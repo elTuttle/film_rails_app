@@ -2,4 +2,10 @@
 <h2>Age: <%= @actor.age %></h2>
 <p><font size="5"><%= @actor.bio %></font></p>
 
+<% if @actor.best_movie%>
+  <h3>Highest Rated Movie: <%= @actor.best_movie.title %> at <%= @actor.best_movie.avg_review%> / 10 </h3>
+<%else%>
+  <h3><%= @actor.name %> has not been in any movies yet.</h3>
+<%end%>
+
 <%= link_to "Delete", actor_path(@actor), method: :delete %>
