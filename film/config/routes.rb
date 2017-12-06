@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :actors, only: [:new, :create]
     resources :ratings
   end
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   get '/movies/:id/addactor', to: 'movies#add_actor_page'
   patch '/movies/:id/addactor', to: 'movies#add_actor', as: 'add_actor'

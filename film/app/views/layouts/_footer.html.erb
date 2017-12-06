@@ -2,8 +2,13 @@
   <% if current_user.nil? %>
     <%= link_to "Sign In", new_user_session_path %>
     <%= link_to "Sign Up", new_user_registration_path %>
+    <%= link_to "Sign in with Facebook", user_facebook_omniauth_authorize_path %>
   <% else %>
-    Signed in as <%= current_user.username%>
+    <%if current_user.provider == "facebook"%>
+      Signed in as <%= current_user.email%> through Facebook
+    <%else%>
+      Signed in as <%= current_user.username%>
+    <%end%>
     <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
   <% end %>
 </h3>
