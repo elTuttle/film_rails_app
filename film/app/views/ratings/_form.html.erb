@@ -4,7 +4,7 @@
 <%= f.text_area :content %><br>
 
 <%= f.label :score %><br>
-<%= f.number_field :score %><br>
+<%= f.number_field :score , max: 10, min: 1%><br>
 
 <%= f.submit%>
 <% end %>

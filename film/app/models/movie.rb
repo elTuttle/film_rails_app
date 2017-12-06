@@ -16,6 +16,8 @@ class Movie < ActiveRecord::Base
         counter += 1
       end
       movie_score.to_f/counter
+    else
+      0
     end
   end
 

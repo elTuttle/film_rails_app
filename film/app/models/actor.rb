@@ -8,7 +8,7 @@ class Actor < ActiveRecord::Base
     best = nil
     self.movies.each do |movie|
       if best == nil
-        best = movies
+        best = movie
       else
         if best.avg_review < movie.avg_review
           best = movie
