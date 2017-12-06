@@ -1,0 +1,6 @@
+<%= form_for @movie,:url => add_actor_path(@movie) do |f|%>
+  <p>Add Existing Actor:</p>
+  <%= f.collection_select :actor_ids, Actor.all, :id, :name, include_blank: ""  %><br>
+  <%= f.submit %>
+<%end%>
+<p><%=link_to "Create Actor", new_movie_actor_path(@movie) %></p>
