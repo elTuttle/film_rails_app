@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   end
   devise_for :users
 
+  get '/movies/:id/addactor', to: 'movies#add_actor_page'
+  patch '/movies/:id/addactor', to: 'movies#add_actor', as: 'add_actor'
+
   post '/actors/new', to: 'actors#create'
 
   post '/movies/:movie_id/actors/:id/remove', to: 'movies#remove_actor'

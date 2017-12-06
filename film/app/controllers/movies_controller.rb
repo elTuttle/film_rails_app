@@ -56,6 +56,30 @@ class MoviesController < ApplicationController
     end
   end
 
+  def add_actor_page
+    @movie = Movie.find(params[:id])
+    if current_user.id == @movie.user_id
+    else
+      redirect_to movie_path(@movie)
+    end
+  end
+
+  def add_actor
+    @movie = Movie.find(params[:id])
+    #binding.pry
+    if !@movie.actors.find_by(id: params[:movie][:actor_ids])
+      if @movie.actors << Actor.find(params[:movie][:actor_ids])
+        redirect_to movie_path(@movie)
+      else
+        flash[:alert] = "Could not add Actor"
+        redirect_to movie_path(@movie)
+      end
+    else
+      flash[:alert] = "Actor is already in movie billing"
+      redirect_to movie_path(@movie)
+    end
+  end
+
   def update
     @movie = Movie.find(params[:id])
     if params[:movie][:actor_ids] != nil && params[:movie][:actor_ids] != ""
