@@ -1,18 +1,29 @@
-<h1><%= @movie.title %></h1>
+<h1 class="movieTitle"><%= @movie.title %></h1>
 
 <h3>Starring: </h3>
-<% @actors.each do |actor| %>
-  <h2 class="actor-link" data-id="<%=actor.id%>"><%= link_to actor.name, actor_path(actor) %></h2>
-  <div id="actor-body-<%=actor.id%>"></div>
+<div id="actors-div">
+  <% @actors.each do |actor| %>
+    <h2 class="actor-link" data-id="<%=actor.id%>"><%= link_to actor.name, actor_path(actor) %></h2>
+    <div id="actor-body-<%=actor.id%>"></div>
+  <% end %>
+</div>
+
+<% if @movie != Movie.all.first %>
+  <a id="previous-button" href="/movies/<%=@movie.id - 1%>" data-id="<%=@movie.id - 1%>">Previous</a>
 <% end %>
 
-<p><font size="5"><%= @movie.description %></font></p>
+<% if @movie != Movie.all.last %>
+  <a id="next-button" href="/movies/<%=@movie.id + 1%>" data-id="<%=@movie.id + 1%>">Next</a>
+<% end %>
 
-<p id="review-link" data-id="<%=@movie.id%>"><%= link_to "See Reviews", movie_ratings_path(@movie) %></p>
+<p class="movieDescription"><font size="5"><%= @movie.description %></font></p>
 
-<div id="review-body-<%=@movie.id%>"></div><br>
+<div class="review-div">
+  <p id="review-link" data-id="<%=@movie.id%>"><%= link_to "See Reviews", movie_ratings_path(@movie) %></p>
 
-<div id="write-review-body-<%=@movie.id%>"></div>
+  <div id="review-body-<%=@movie.id%>"></div><br>
+</div>
+
 
 <%if current_user %>
   <%if current_user.id == @movie.user_id%>
@@ -20,13 +31,32 @@
     <%= link_to "Edit", edit_movie_path(@movie) %>
     <%= link_to "Delete", movie_path(@movie), method: :delete %>
   <%else%>
-    <p id="write-review-link" data-id="<%=@movie.id%>"><%= link_to "Write Review", new_movie_rating_path(@movie) %></p>
+    <%= link_to "Write Review", new_movie_rating_path(@movie) %>
   <% end %>
 <% end %>
 
 
 <script type="text/javascript" charset="utf-8">
 $(function () {
+
+  $("#previous-button").on("click", function(event){
+    event.preventDefault();
+    var id = parseInt($("previous-button")["context"]["activeElement"]["attributes"][2]["value"])
+    $.get("/movies/" + id + ".html", function(data){
+      //debugger;
+      $("#document")["context"]["all"][0]["innerHTML"] = data;
+    })
+  })
+
+  $("#next-button").on("click", function(event){
+    event.preventDefault();
+    var id = parseInt($("next-button")["context"]["activeElement"]["attributes"][2]["value"])
+    $.get("/movies/" + id + ".html", function(data){
+      //debugger;
+      $("#document")["context"]["all"][0]["innerHTML"] = data;
+    })
+  })
+
   $(".actor-link").on("click", function(event){
     event.preventDefault();
     var id = $(this).data("id");
@@ -43,22 +73,18 @@ $(function () {
     });
   });
 
-  $("#write-review-link").on("click", function(event){
-    event.preventDefault();
-    $("#write-review-body")[0][innerHTML] = '<%= render "ratings/form" %>'
-  })
-
-  $("#review-link").on("click", function(event){
+  $(".review-div #review-link").on("click", function(event){
+    //debugger;
     event.preventDefault();
     var id = $(this).data("id");
     $.get("/movies/" + id + "/ratings.json", function(data){
       if (data["ratings"].length == 0) {
         if ($("#review-link")[0]["innerText"] == "See Reviews") {
           $("#review-body-" + id).text("No reviews for this movie yet!")
-          $("#review-link")[0]["innerHTML"] = '<%= link_to "Hide Reviews", movie_ratings_path(@movie) %>'
+          $("#review-link")[0]["innerHTML"] = '<a href="/movies/' + id + '/ratings">Hide Reviews</a>'
         } else {
           $("#review-body-" + id).text("")
-          $("#review-link")[0]["innerHTML"] = '<%= link_to "See Reviews", movie_ratings_path(@movie) %>'
+          $("#review-link")[0]["innerHTML"] = '<a href="/movies/' + id + '/ratings">See Reviews</a>'
         }
       } else {
         if ($("#review-link")[0]["innerText"] == "See Reviews") {

@@ -39,7 +39,10 @@ class RatingsController < ApplicationController
       flash[:alert] = "Must be logged in to Write Review"
       redirect_to new_user_session_path
     end
-    format.json { render json: @movie}
+    respond_to do |format|
+      format.html { render :new }
+      format.json { render json: @movie}
+    end
   end
 
   def create
