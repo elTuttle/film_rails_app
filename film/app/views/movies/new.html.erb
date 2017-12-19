@@ -1,13 +1,11 @@
 <h1>New Film</h1>
 
-<%= render 'form' %>
+<div id="new-film-form"><%= render 'form' %></div>
 
 <div id="movieResult">
-  <h2 id="movieTitle"></h2>
+  <h1 id="movieTitle"></h1>
   <p id="movieBody"></p>
-  <p id="actorName"></p>
-  <p id="actorAge"></p>
-  <p id="actorBio"></p>
+  <h3 id="actorBody"></h3>
 </div>
 
 <script type="text/javascript" charset="utf-8">
@@ -20,11 +18,11 @@
       posting.done(function(data) {
         debugger
         var movie = data;
+        $("h1").text("");
         $("#movieTitle").text(movie["title"]);
         $("#movieBody").text(movie["description"]);
-        $("#actorName").text(moviea["actors"][0]["name"]);
-        $("#actorAge").text(movie["actors"][0]["age"]);
-        $("#actorBio").text(movie["actors"][0]["bio"]);
+        $("#actorBody").text("Starring: " + movie["actors"][0]["name"]);
+        $("#new-film-form").text("");
       });
     });
   });
