@@ -1,10 +1,17 @@
 <h1><%= @movie.title %></h1>
+
 <h3>Starring: </h3>
 <% @actors.each do |actor| %>
   <h2 class="actor-link" data-id="<%=actor.id%>"><%= link_to actor.name, actor_path(actor) %></h2>
   <div id="actor-body-<%=actor.id%>"></div>
 <% end %>
+
 <p><font size="5"><%= @movie.description %></font></p>
+
+<p id="review-link" data-id="<%=@movie.id%>"><%= link_to "See Reviews", movie_ratings_path(@movie) %></p>
+
+<div id="review-body-<%=@movie.id%>"></div><br>
+
 <%if current_user %>
   <%if current_user.id == @movie.user_id%>
     <%= link_to "Add Actor", "/movies/#{@movie.id}/addactor" %>
@@ -14,7 +21,7 @@
     <%= link_to "Write Review", new_movie_rating_path(@movie) %>
   <% end %>
 <% end %>
-<%= link_to "See Reviews", movie_ratings_path(@movie) %>
+
 
 <script type="text/javascript" charset="utf-8">
 $(function () {
@@ -34,5 +41,24 @@ $(function () {
 
     });
   });
+
+  $("#review-link").on("click", function(event){
+    event.preventDefault();
+    var id = $(this).data("id");
+    $.get("/movies/" + id + "/ratings.json", function(data){
+      if (data["ratings"].length == 0) {
+        if ($("#review-link")[0]["innerText"] == "See Reviews") {
+          $("#review-body-" + id).text("No reviews for this movie yet!")
+          $("#review-link")[0]["innerHTML"] = '<%= link_to "Hide Reviews", movie_ratings_path(@movie) %>'
+        } else {
+          $("#review-body-" + id).text("")
+          $("#review-link")[0]["innerHTML"] = '<%= link_to "See Reviews", movie_ratings_path(@movie) %>'
+        }
+      } else {
+
+      }
+    })
+  })
+
 });
 </script>

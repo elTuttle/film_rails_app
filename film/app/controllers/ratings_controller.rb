@@ -8,6 +8,10 @@ class RatingsController < ApplicationController
       flash[:alert] = "No reviews yet"
       redirect_to movie_path(params[:movie_id])
     end
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @movie}
+    end
   end
 
   def show
