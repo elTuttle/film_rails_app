@@ -2,11 +2,12 @@
 
 <%= render 'form' %>
 
-<div id="productResult">
-  <h2 id="productTitle"></h2>
-  <p id="productBody"></p>
-  <p id="productInventory"></p>
-  <p id="productPrice"></p>
+<div id="movieResult">
+  <h2 id="movieTitle"></h2>
+  <p id="movieBody"></p>
+  <p id="actorName"></p>
+  <p id="actorAge"></p>
+  <p id="actorBio"></p>
 </div>
 
 <script type="text/javascript" charset="utf-8">
@@ -15,14 +16,19 @@
       //prevent form from submitting the default way
       event.preventDefault();
       var values = $(this).serialize();
-      var posting = $.post('/products', values);
+      var posting = $.post('/movies', values);
       posting.done(function(data) {
-        var product = data;
-        $("#productTitle").text(product["title"]);
-        $("#productBody").text(product["description"]);
-        $("#productInventory").text(product["inventory"]);
-        $("#productPrice").text(product["price"]);
+        debugger
+        var movie = data;
+        $("#movieTitle").text(movie["title"]);
+        $("#movieBody").text(movie["description"]);
+        $("#actorName").text(moviea["actors"][0]["name"]);
+        $("#actorAge").text(movie["actors"][0]["age"]);
+        $("#actorBio").text(movie["actors"][0]["bio"]);
       });
     });
   });
+
+
+
 </script>

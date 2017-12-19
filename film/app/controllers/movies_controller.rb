@@ -22,10 +22,9 @@ class MoviesController < ApplicationController
     @movie.user_id = current_user.id
     #binding.pry
     if @movie.save
-      redirect_to movie_path(@movie)
+      render json: @movie, status: 201
     else
       flash[:alert] = "Could not submit Movie"
-      redirect_to new_movie_path
     end
   end
 
