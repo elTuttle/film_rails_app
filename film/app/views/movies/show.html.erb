@@ -1,7 +1,8 @@
 <h1><%= @movie.title %></h1>
 <h3>Starring: </h3>
 <% @actors.each do |actor| %>
-  <h2><%= link_to actor.name, actor_path(actor) %></h2>
+  <h2 class="actor-link" data-id="<%=actor.id%>"><%= link_to actor.name, actor_path(actor) %></h2>
+  <div id="actor-body-<%=actor.id%>"></div>
 <% end %>
 <p><font size="5"><%= @movie.description %></font></p>
 <%if current_user %>
@@ -14,3 +15,24 @@
   <% end %>
 <% end %>
 <%= link_to "See Reviews", movie_ratings_path(@movie) %>
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  $(".actor-link").on("click", function(event){
+    event.preventDefault();
+    var id = $(this).data("id");
+    $.get("/actors/" + id + ".json", function(data){
+      //debugger;
+      var info = 'Age: ' + data["age"] + " " +
+                 'Bio: ' + data["bio"];
+      //debugger;
+      if ($("#actor-body-" + id)[0]["innerText"] == info){
+        $("#actor-body-" + id).text("");
+      } else {
+        $("#actor-body-" + id).text(info);
+      }
+
+    });
+  });
+});
+</script>

@@ -32,6 +32,10 @@ class MoviesController < ApplicationController
   def show
     @movie = Movie.find(params[:id])
     @actors = @movie.actors
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @movie}
+    end
   end
 
   def edit
