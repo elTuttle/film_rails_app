@@ -1,3 +1,32 @@
 <h1>Create Actor</h1>
 
-<%= render 'form' %>
+<div id="new-actor-form"><%= render 'form' %></div>
+
+<div id="actorResult">
+  <h1 id="actorName"></h1>
+  <p id="actorBio"></p>
+  <h3 id="actorAge"></h3>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+    $('form').submit(function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+      var values = $(this).serialize();
+      var posting = $.post('/actors', values);
+      posting.done(function(data) {
+        debugger
+        var actor = data;
+        $("h1").text("");
+        $("#actorName").text(actor["name"]);
+        $("#actorAge").text("Age:" + actor["age"]);
+        $("#actorBio").text(actor["bio"]);
+        $("#new-actor-form").text("");
+      });
+    });
+  });
+
+
+
+</script>

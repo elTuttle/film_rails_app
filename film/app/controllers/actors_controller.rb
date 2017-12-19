@@ -41,7 +41,7 @@ class ActorsController < ApplicationController
           redirect_to new_actor_path
         end
       else
-        redirect_to actor_path(@actor)
+        render json: @actor, status: 201
       end
     else
       flash[:alert] = "Could not save actor, might already exist or name field was empty"
