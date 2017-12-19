@@ -58,9 +58,8 @@ $(function () {
         if ($("#review-link")[0]["innerText"] == "See Reviews") {
           //debugger;
           for (var i = 0; i < data["ratings"].length; i++) {
-            $("#review-body-" + id)[0]["innerHTML"] += '<p>Score: ' + data["ratings"][i]["score"] +
-                                                    ' out of 10</p>';
-            $("#review-body-" + id)[0]["innerHTML"] += '<p>' + data["ratings"][i]["content"] + '</p>';
+            var rating = new Comment(data["ratings"][i]["score"],data["ratings"][i]["content"]);
+            $("#review-body-" + id)[0]["innerHTML"] += rating.format();
             //debugger;
           }
           $("#review-link")[0]["innerHTML"] = '<%= link_to "Hide Reviews", movie_ratings_path(@movie) %>'
@@ -73,4 +72,15 @@ $(function () {
   })
 
 });
+
+function Comment(score,content) {
+  this.score = score;
+  this.content = content;
+  function format(){
+    return '<p>Score: ' + this.score + ' out of 10</p>' + '<p>' + this.content + '</p>';
+  }
+}
+
+Comment.prototype = Object.create(Comment.prototype)
+
 </script>
