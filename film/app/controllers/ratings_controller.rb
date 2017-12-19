@@ -9,7 +9,7 @@ class RatingsController < ApplicationController
       redirect_to movie_path(params[:movie_id])
     end
     respond_to do |format|
-      format.html { render :show }
+      format.html { render :index }
       format.json { render json: @movie}
     end
   end
@@ -17,6 +17,7 @@ class RatingsController < ApplicationController
   def show
     @rating = Rating.find(params[:id])
     @movie = Movie.find(params[:movie_id])
+    format.json { render json: @movie}
   end
 
   def new

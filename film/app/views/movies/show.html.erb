@@ -55,7 +55,19 @@ $(function () {
           $("#review-link")[0]["innerHTML"] = '<%= link_to "See Reviews", movie_ratings_path(@movie) %>'
         }
       } else {
-
+        if ($("#review-link")[0]["innerText"] == "See Reviews") {
+          //debugger;
+          for (var i = 0; i < data["ratings"].length; i++) {
+            $("#review-body-" + id)[0]["innerHTML"] += '<p>Score: ' + data["ratings"][i]["score"] +
+                                                    ' out of 10</p>';
+            $("#review-body-" + id)[0]["innerHTML"] += '<p>' + data["ratings"][i]["content"] + '</p>';
+            //debugger;
+          }
+          $("#review-link")[0]["innerHTML"] = '<%= link_to "Hide Reviews", movie_ratings_path(@movie) %>'
+        } else {
+          $("#review-body-" + id).text("")
+          $("#review-link")[0]["innerHTML"] = '<%= link_to "See Reviews", movie_ratings_path(@movie) %>'
+        }
       }
     })
   })
