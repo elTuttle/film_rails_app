@@ -12,13 +12,15 @@
 
 <div id="review-body-<%=@movie.id%>"></div><br>
 
+<div id="write-review-body-<%=@movie.id%>"></div>
+
 <%if current_user %>
   <%if current_user.id == @movie.user_id%>
     <%= link_to "Add Actor", "/movies/#{@movie.id}/addactor" %>
     <%= link_to "Edit", edit_movie_path(@movie) %>
     <%= link_to "Delete", movie_path(@movie), method: :delete %>
   <%else%>
-    <%= link_to "Write Review", new_movie_rating_path(@movie) %>
+    <p id="write-review-link" data-id="<%=@movie.id%>"><%= link_to "Write Review", new_movie_rating_path(@movie) %></p>
   <% end %>
 <% end %>
 
@@ -30,17 +32,21 @@ $(function () {
     var id = $(this).data("id");
     $.get("/actors/" + id + ".json", function(data){
       //debugger;
-      var info = 'Age: ' + data["age"] + " " +
-                 'Bio: ' + data["bio"];
+      var actor = new Actor(data["age"],data["bio"])
       //debugger;
-      if ($("#actor-body-" + id)[0]["innerText"] == info){
+      if ($("#actor-body-" + id)[0]["innerText"] == actor.format){
         $("#actor-body-" + id).text("");
       } else {
-        $("#actor-body-" + id).text(info);
+        $("#actor-body-" + id).text(actor.format);
       }
 
     });
   });
+
+  $("#write-review-link").on("click", function(event){
+    event.preventDefault();
+    $("#write-review-body")[0][innerHTML] = '<%= render "ratings/form" %>'
+  })
 
   $("#review-link").on("click", function(event){
     event.preventDefault();
@@ -59,7 +65,8 @@ $(function () {
           //debugger;
           for (var i = 0; i < data["ratings"].length; i++) {
             var rating = new Comment(data["ratings"][i]["score"],data["ratings"][i]["content"]);
-            $("#review-body-" + id)[0]["innerHTML"] += rating.format();
+            //debugger
+            $("#review-body-" + id)[0]["innerHTML"] += rating.format;
             //debugger;
           }
           $("#review-link")[0]["innerHTML"] = '<%= link_to "Hide Reviews", movie_ratings_path(@movie) %>'
@@ -76,9 +83,21 @@ $(function () {
 function Comment(score,content) {
   this.score = score;
   this.content = content;
-  function format(){
-    return '<p>Score: ' + this.score + ' out of 10</p>' + '<p>' + this.content + '</p>';
-  }
+  this.format = comment_format.call(this);
+}
+
+function Actor(age,bio) {
+  this.age = age;
+  this.bio = bio;
+  this.format = actor_format.call(this);
+}
+
+function actor_format(){
+  return 'Age: ' + this.age + " " + 'Bio: ' + this.bio;
+}
+
+function comment_format() {
+  return '<p>Score: ' + this.score + ' out of 10</p>' + '<p>' + this.content + '</p>';
 }
 
 Comment.prototype = Object.create(Comment.prototype)

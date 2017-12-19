@@ -27,7 +27,6 @@ class RatingsController < ApplicationController
         @movie.ratings.each do |rating|
           if rating.user_id == current_user.id
             flash[:alert] = "User has already reviewed this movie."
-            redirect_to movie_path(@movie)
           end
         end
         @rating = @movie.ratings.build
@@ -40,6 +39,7 @@ class RatingsController < ApplicationController
       flash[:alert] = "Must be logged in to Write Review"
       redirect_to new_user_session_path
     end
+    format.json { render json: @movie}
   end
 
   def create
